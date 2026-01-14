@@ -14,143 +14,130 @@ st.set_page_config(
     layout="wide"
 )
 
-# تصميم واجهة مستخدم محسنة للوضوح (Super Clarity CSS)
+# تصميم واجهة مستخدم احترافية وعالية التباين
 st.markdown("""
     <style>
-    /* تحسين الخلفية العامة */
     .main { background-color: #05070a; color: #ffffff; }
-    
-    /* جعل القائمة الجانبية واضحة جداً */
     [data-testid="stSidebar"] {
         background-color: #0d1117 !important;
         border-right: 2px solid #00f2ff !important;
     }
-    
-    /* وضوح نصوص العناوين في القائمة الجانبية */
-    .css-17l6nlh, .css-12ttj6m, .st-ae {
-        color: #ffffff !important;
-        font-size: 1.1rem !important;
-        font-weight: bold !important;
-    }
-
-    /* العنوان الرئيسي (Header) */
     .header-box { 
-        padding: 30px; 
+        padding: 25px; 
         border-radius: 15px; 
         background: linear-gradient(135deg, #001f3f, #0074d9); 
         border-bottom: 4px solid #00f2ff;
-        margin-bottom: 35px;
-        box-shadow: 0 10px 30px rgba(0,242,255,0.2);
+        margin-bottom: 30px;
+        text-align: center;
     }
-    
-    /* وضوح نصوص الراديو بوكس في القائمة الجانبية */
-    div[data-testid="stRadio"] label p {
-        color: #00f2ff !important; /* لون فوسفوري واضح */
-        font-size: 1.1rem !important;
-        font-weight: 600 !important;
-    }
-
-    /* توقيع المطور في القائمة الجانبية */
     .signature-card {
-        padding: 20px;
+        padding: 15px;
         background: #161b22;
         border: 2px solid #00f2ff;
-        border-radius: 12px;
+        border-radius: 10px;
         text-align: center;
-        margin-bottom: 20px;
+    }
+    /* تحسين وضوح نصوص الراديو */
+    div[data-testid="stRadio"] label p {
+        color: #ffffff !important;
+        font-size: 1.1rem !important;
+        font-weight: 600 !important;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- 2. القائمة الجانبية المحدثة (High-Visibility Sidebar) ---
+# --- 2. محرك تحميل البيانات مع معالجة الأخطاء (Data Engine) ---
+@st.cache_data
+def load_all_data():
+    files = {
+        "petro": "Data/petrophysical_data.csv",
+        "sensors": "Data/sensor_integrity_data.csv",
+        "history": "Data/production_history.csv",
+        "drilling": "Data/real_time_drilling_data.csv"
+    }
+    loaded_data = {}
+    for key, path in files.items():
+        try:
+            # التأكد من وجود الملف وقراءته
+            loaded_data[key] = pd.read_csv(path)
+        except Exception as e:
+            # في حال الفشل، ننشئ DataFrame فارغ لتجنب الـ NameError
+            loaded_data[key] = pd.DataFrame()
+            st.sidebar.warning(f"⚠️ Missing file: {key}")
+    return loaded_data
+
+# تعريف المتغير data بشكل صريح
+all_data = load_all_data()
+
+# --- 3. القائمة الجانبية (Mission Control) ---
 with st.sidebar:
     st.markdown(f"""
         <div class='signature-card'>
-            <h1 style='color: #ffffff; margin:0; font-size: 1.5em; text-shadow: 2px 2px #000;'>{PLATFORM_NAME}</h1>
-            <p style='color: #00f2ff; font-size: 0.9em; font-weight: bold;'>Digital Twin Engine</p>
-            <hr style='border-top: 2px solid #00f2ff; opacity: 0.5;'>
-            <p style='color: #ffffff; font-size: 0.85em;'>Architected & Developed by:</p>
+            <h1 style='color: #ffffff; margin:0; font-size: 1.4em;'>{PLATFORM_NAME}</h1>
+            <p style='color: #00f2ff; font-size: 0.8em;'>Sovereign Digital Twin</p>
+            <hr style='border-top: 1px solid #00f2ff;'>
+            <p style='color: #ffffff; font-size: 0.85em;'>Designed by:</p>
             <p style='color: #00f2ff; font-size: 1.1em; font-weight: bold;'>{DEVELOPER_NAME}</p>
         </div>
     """, unsafe_allow_html=True)
     
-    st.markdown("<br>", unsafe_allow_html=True)
-    # استخدام العنوان الملون هنا بدلاً من الراديو العادي لزيادة الوضوح
-    st.markdown("<p style='color: #ffffff; font-weight: bold; font-size: 1.2em;'>🕹️ DASHBOARD SELECTOR</p>", unsafe_allow_html=True)
+    st.markdown("<br><p style='color: #ffffff; font-weight: bold;'>🕹️ MODULE SELECTOR</p>", unsafe_allow_html=True)
     menu = st.radio("", 
-                    ["Strategic Dashboard", "Subsurface (10k Petrophysics)", "Production (History & AI)", "Safety (10k Sensors)"],
+                    ["Strategic Dashboard", "Subsurface Twin", "Production Analytics", "Safety & Sensors"],
                     label_visibility="collapsed")
     
     st.markdown("---")
-    st.success("✅ System Online")
-
-# --- 3. العنوان الرئيسي (Header) ---
-st.markdown(f"""
-    <div class='header-box'>
-        <h1 style='color: white; margin: 0; font-size: 2.5em;'>{PLATFORM_NAME} | Operational Command Hub</h1>
-        <p style='color: #00f2ff; font-size: 1.2em; font-weight: bold;'>Integrated Field Intelligence System - Designed by {DEVELOPER_NAME}</p>
-    </div>
-""", unsafe_allow_html=True)
-
-# (تكملة بقية الكود الخاص بالـ Tabs والبيانات كما هي)
+    st.success("✅ System Connected")
 
 # --- 4. معالجة الأقسام (Module Logic) ---
 
+# العنوان الرئيسي الموحد
+st.markdown(f"""
+    <div class='header-box'>
+        <h1 style='color: white; margin: 0;'>{PLATFORM_NAME} | Operational Command Hub</h1>
+        <p style='color: #00f2ff; font-weight: bold;'>Developed by {DEVELOPER_NAME}</p>
+    </div>
+""", unsafe_allow_html=True)
+
 if menu == "Strategic Dashboard":
-    st.markdown(f"<div class='header-box'><h1>Global Operations Summary</h1><p>Integrated KPIs Managed by <b>{DEVELOPER_NAME}</b></p></div>", unsafe_allow_html=True)
-    
     c1, c2, c3, c4 = st.columns(4)
-    with c1: st.metric("Subsurface Logs", f"{len(data['petro'])} pts")
-    with c2: st.metric("Live Sensor Feeds", f"{len(data['sensors'])} pts")
-    with c3: st.metric("Avg Pressure", "3120 psi", "-15")
-    with c4: st.metric("System Uptime", "99.9%")
+    with c1: st.metric("Reservoir Logs", f"{len(all_data['petro'])} pts")
+    with c2: st.metric("Sensor Streams", f"{len(all_data['sensors'])} pts")
+    with c3: st.metric("Field Status", "Optimal")
+    with c4: st.metric("AI Accuracy", "94.8%")
 
-    # عرض عينة من البيانات الضخمة
-    st.subheader("Real-time Drilling Data Stream")
-    st.dataframe(data['drilling'].head(100), use_container_width=True)
+    st.subheader("Field Performance Overview")
+    if not all_data['drilling'].empty:
+        st.dataframe(all_data['drilling'].head(10), use_container_width=True)
 
-elif menu == "Subsurface (10k Petrophysics)":
-    st.title("🌐 Advanced Subsurface Analytics")
-    if not data['petro'].empty:
-        col_a, col_b = st.columns([1, 2])
-        with col_a:
-            st.write("**Cross-Plot: Porosity vs Permeability**")
-            fig_cross = px.scatter(data['petro'], x='Porosity_%', y='Permeability_mD', 
-                                   color='Gamma_Ray_API', template='plotly_dark')
-            st.plotly_chart(fig_cross, use_container_width=True)
-        with col_b:
-            st.write("**3D Structural Property Mapping**")
-            fig_3d = go.Figure(data=[go.Scatter3d(
-                x=data['petro']['Depth_m'], y=data['petro']['Porosity_%'], z=data['petro']['Permeability_mD'],
-                mode='markers', marker=dict(size=2, color=data['petro']['Gamma_Ray_API'], colorscale='Viridis')
-            )])
-            fig_3d.update_layout(template='plotly_dark', margin=dict(l=0, r=0, b=0, t=0))
-            st.plotly_chart(fig_3d, use_container_width=True)
+elif menu == "Subsurface Twin":
+    st.subheader("🌐 3D Petrophysical Mapping")
+    if not all_data['petro'].empty:
+        fig_3d = px.scatter_3d(all_data['petro'], x='Depth_m', y='Porosity_%', z='Permeability_mD',
+                               color='Gamma_Ray_API', template='plotly_dark')
+        st.plotly_chart(fig_3d, use_container_width=True)
+    else:
+        st.error("Petrophysical data not found.")
 
-elif menu == "Production (History & AI)":
-    st.title("🔮 Production Forecasting Engine")
-    if not data['history'].empty:
-        fig_hist = px.line(data['history'], x=data['history'].columns[0], y=data['history'].columns[1], 
-                           title="Historical Production Trend", template='plotly_dark')
-        st.plotly_chart(fig_hist, use_container_width=True)
-    
-    st.info("AI Analysis: Based on current trends, EUR is expected to increase by 4.2% with optimized drawdown.")
+elif menu == "Production Analytics":
+    st.subheader("🔮 Predictive Production Trends")
+    # تم تغيير الاسم هنا من 'history' ليتوافق مع المفاتيح المعرفة في الدالة
+    if not all_data['history'].empty:
+        fig_prod = px.line(all_data['history'], x=all_data['history'].columns[0], y=all_data['history'].columns[1],
+                           template='plotly_dark', title="Historical Production")
+        st.plotly_chart(fig_prod, use_container_width=True)
+    else:
+        st.error("Production history data not found.")
 
-elif menu == "Safety (10k Sensors)":
-    st.title("🛡️ HSE & Integrity Sentinel")
-    if not data['sensors'].empty:
-        st.write("**Real-time Vibration & Pressure Stream (10,000 Logs)**")
-        # عرض آخر 500 نقطة لضمان سرعة الأداء
-        fig_sensors = go.Figure()
-        fig_sensors.add_trace(go.Scatter(y=data['sensors']['Wellhead_Pressure_psi'].tail(500), name="Pressure"))
-        fig_sensors.add_trace(go.Scatter(y=data['sensors']['Vibration_Level_mm_s'].tail(500), name="Vibration", yaxis="y2"))
-        fig_sensors.update_layout(
-            template='plotly_dark',
-            yaxis2=dict(title="Vibration", overlaying="y", side="right"),
-            title="High-Frequency Monitoring Window"
-        )
-        st.plotly_chart(fig_sensors, use_container_width=True)
+elif menu == "Safety & Sensors":
+    st.subheader("🛡️ Asset Integrity Sentinel")
+    if not all_data['sensors'].empty:
+        fig_sensor = go.Figure()
+        fig_sensor.add_trace(go.Scatter(y=all_data['sensors']['Wellhead_Pressure_psi'].tail(100), name="Pressure"))
+        fig_sensor.update_layout(template='plotly_dark', title="Real-time Sensor Feed (Last 100 Logs)")
+        st.plotly_chart(fig_sensor, use_container_width=True)
+    else:
+        st.error("Sensor data not found.")
 
 # --- 5. التذييل ---
-st.markdown("---")
-st.markdown(f"<p style='text-align: center; color: #64748b;'>Proprietary Big Data Platform | Developed & Architected by <b>{DEVELOPER_NAME}</b></p>", unsafe_allow_html=True)
+st.markdown(f"<p style='text-align: center; color: #64748b;'>{PLATFORM_NAME} | Proprietary Tech by {DEVELOPER_NAME} © 2026</p>", unsafe_allow_html=True)
