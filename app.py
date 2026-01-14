@@ -4,7 +4,7 @@ import plotly.express as px
 import pandas as pd
 import numpy as np
 
-# --- 1. الإعدادات العامة والهوية ---
+# --- 1. إعدادات الهوية والوضوح العالي ---
 PLATFORM_NAME = "PetroVision AI"
 DEVELOPER_NAME = "Eng. Sulaiman Kudaimi"
 
@@ -14,56 +14,85 @@ st.set_page_config(
     layout="wide"
 )
 
-# تصميم الواجهة الاحترافية (Custom CSS)
+# تصميم واجهة مستخدم محسنة للوضوح (Super Clarity CSS)
 st.markdown("""
     <style>
-    .main { background-color: #0b0e11; color: #e2e8f0; }
-    .stSidebar { background-color: #151b23; border-right: 2px solid #00f2ff; }
-    .header-box { 
-        padding: 20px; border-radius: 12px; 
-        background: linear-gradient(135deg, #0f172a, #1e3a8a); 
-        border-left: 5px solid #00f2ff; margin-bottom: 25px;
+    /* تحسين الخلفية العامة */
+    .main { background-color: #05070a; color: #ffffff; }
+    
+    /* جعل القائمة الجانبية واضحة جداً */
+    [data-testid="stSidebar"] {
+        background-color: #0d1117 !important;
+        border-right: 2px solid #00f2ff !important;
     }
-    .kpi-card { background-color: #1c252e; padding: 15px; border-radius: 10px; border: 1px solid #334155; text-align: center; }
+    
+    /* وضوح نصوص العناوين في القائمة الجانبية */
+    .css-17l6nlh, .css-12ttj6m, .st-ae {
+        color: #ffffff !important;
+        font-size: 1.1rem !important;
+        font-weight: bold !important;
+    }
+
+    /* العنوان الرئيسي (Header) */
+    .header-box { 
+        padding: 30px; 
+        border-radius: 15px; 
+        background: linear-gradient(135deg, #001f3f, #0074d9); 
+        border-bottom: 4px solid #00f2ff;
+        margin-bottom: 35px;
+        box-shadow: 0 10px 30px rgba(0,242,255,0.2);
+    }
+    
+    /* وضوح نصوص الراديو بوكس في القائمة الجانبية */
+    div[data-testid="stRadio"] label p {
+        color: #00f2ff !important; /* لون فوسفوري واضح */
+        font-size: 1.1rem !important;
+        font-weight: 600 !important;
+    }
+
+    /* توقيع المطور في القائمة الجانبية */
+    .signature-card {
+        padding: 20px;
+        background: #161b22;
+        border: 2px solid #00f2ff;
+        border-radius: 12px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
     </style>
     """, unsafe_allow_html=True)
 
-# --- 2. محرك تحميل البيانات (Data Ingest Engine) ---
-@st.cache_data
-def load_all_data():
-    files = {
-        "petro": "Data/petrophysical_data.csv",
-        "sensors": "Data/sensor_integrity_data.csv",
-        "history": "Data/production_history.csv",
-        "drilling": "Data/real_time_drilling_data.csv"
-    }
-    data_dict = {}
-    for key, path in files.items():
-        try:
-            data_dict[key] = pd.read_csv(path)
-        except:
-            data_dict[key] = pd.DataFrame()
-    return data_dict
-
-data = load_all_data()
-
-# --- 3. القائمة الجانبية (Mission Control) ---
+# --- 2. القائمة الجانبية المحدثة (High-Visibility Sidebar) ---
 with st.sidebar:
     st.markdown(f"""
-        <div style='text-align: center; padding: 15px; border-radius: 10px; background: #0f172a; border: 1px solid #00f2ff;'>
-            <h1 style='color: #00f2ff; margin:0; font-size: 1.4em;'>{PLATFORM_NAME}</h1>
-            <p style='color: #94a3b8; font-size: 0.8em;'>Sovereign Digital Twin Platform</p>
-            <hr style='border-top: 1px solid #334155;'>
-            <p style='color: #cbd5e1; font-size: 0.85em;'>By: <b>{DEVELOPER_NAME}</b></p>
+        <div class='signature-card'>
+            <h1 style='color: #ffffff; margin:0; font-size: 1.5em; text-shadow: 2px 2px #000;'>{PLATFORM_NAME}</h1>
+            <p style='color: #00f2ff; font-size: 0.9em; font-weight: bold;'>Digital Twin Engine</p>
+            <hr style='border-top: 2px solid #00f2ff; opacity: 0.5;'>
+            <p style='color: #ffffff; font-size: 0.85em;'>Architected & Developed by:</p>
+            <p style='color: #00f2ff; font-size: 1.1em; font-weight: bold;'>{DEVELOPER_NAME}</p>
         </div>
     """, unsafe_allow_html=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
-    menu = st.radio("OPERATIONAL MODULES", 
-                    ["Strategic Dashboard", "Subsurface (10k Petrophysics)", "Production (History & AI)", "Safety (10k Sensors)"])
+    # استخدام العنوان الملون هنا بدلاً من الراديو العادي لزيادة الوضوح
+    st.markdown("<p style='color: #ffffff; font-weight: bold; font-size: 1.2em;'>🕹️ DASHBOARD SELECTOR</p>", unsafe_allow_html=True)
+    menu = st.radio("", 
+                    ["Strategic Dashboard", "Subsurface (10k Petrophysics)", "Production (History & AI)", "Safety (10k Sensors)"],
+                    label_visibility="collapsed")
     
     st.markdown("---")
-    st.success("✅ Big Data Engine: Connected")
+    st.success("✅ System Online")
+
+# --- 3. العنوان الرئيسي (Header) ---
+st.markdown(f"""
+    <div class='header-box'>
+        <h1 style='color: white; margin: 0; font-size: 2.5em;'>{PLATFORM_NAME} | Operational Command Hub</h1>
+        <p style='color: #00f2ff; font-size: 1.2em; font-weight: bold;'>Integrated Field Intelligence System - Designed by {DEVELOPER_NAME}</p>
+    </div>
+""", unsafe_allow_html=True)
+
+# (تكملة بقية الكود الخاص بالـ Tabs والبيانات كما هي)
 
 # --- 4. معالجة الأقسام (Module Logic) ---
 
